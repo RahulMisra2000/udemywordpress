@@ -2,8 +2,10 @@
   
   get_header();
 
-  while(have_posts()) {
-    the_post();
+  while(have_posts()) {         // ****************************  OUTER PROGRAM RECORD LOOP *****************************************
+                                // **** This loop will give us ONE program record because this template is single-program.php
+    the_post();                 //      So, after doing the_post() tons of functions are now available
+                                //      For instance, get_the_ID() will give is the id of the program record. 
     pageBanner();
      ?>
 
@@ -15,35 +17,52 @@
       <div class="generic-content"><?php the_field('main_body_content'); ?></div>
 
       <?php 
+        // ****************************************************************************************************************************
+        // *** REMEMBER, in the dashboard using ACF plugin, a M:M relationship was created between Professor and Program custom content
+        //     types.   
+        //                          M PROFESSOR         :     M PROGRAMS                  M:M relationship
+        //          (related_programs custom field 
+        //            setup here in professor record)
+        //
+        //     This was done by configuring a custom field (called related_programs) in ACF and specifying that it should be made 
+        //     available in the Professor record. So, when a professor record is added via the dashboard, we can select one or more 
+        //     programs (think subjects) that the professor teaches.
+        // ****************************************************************************************************************************
+    
         $relatedProfessors = new WP_Query(array(
           'posts_per_page' => -1,
-          'post_type' => 'professor',
+          'post_type' => 'professor',                           // *** I want professor records
           'orderby' => 'title',
           'order' => 'ASC',
-          'meta_query' => array(
+          'meta_query' => array(                                // ***  Where clause
             array(
-              'key' => 'related_programs',
-              'compare' => 'LIKE',
-              'value' => '"' . get_the_ID() . '"'
+              'key' => 'related_programs',                          // the related_programs field in the Professor records
+              'compare' => 'LIKE',                                  // contains
+              'value' => '"' . get_the_ID() . '"'                   // the program ID
+                                                                    // It is the program record's ID because get_the_ID() returns
+                                                                    // the ID of the current item in the LOOP ... and at this point
+                                                                    // we are in the Program record Loop
             )
           )
         ));
 
         if ($relatedProfessors->have_posts()) {
-          echo '<hr class="section-break">';
-        echo '<h2 class="headline headline--medium">' . get_the_title() . ' Professors</h2>';
+            echo '<hr class="section-break">';
+            echo '<h2 class="headline headline--medium">' . get_the_title() . ' Professors</h2>';
 
-        echo '<ul class="professor-cards">';
-        while($relatedProfessors->have_posts()) {
-          $relatedProfessors->the_post(); ?>
-          <li class="professor-card__list-item">
-            <a class="professor-card" href="<?php the_permalink(); ?>">
-              <img class="professor-card__image" src="<?php the_post_thumbnail_url('professorLandscape') ?>">
-              <span class="professor-card__name"><?php the_title(); ?></span>
-            </a>
-          </li>
-        <?php }
-        echo '</ul>';
+            echo '<ul class="professor-cards">';
+
+            while($relatedProfessors->have_posts()) {             // INNER PROFESSOR records LOOP ********************************
+                  $relatedProfessors->the_post(); ?>
+                  <li class="professor-card__list-item">
+                    <a class="professor-card" href="<?php the_permalink(); ?>">
+                      <img class="professor-card__image" src="<?php the_post_thumbnail_url('professorLandscape') ?>">
+                      <span class="professor-card__name"><?php the_title(); ?></span>
+                    </a>
+                  </li>
+            <?php }
+
+            echo '</ul>';
         }
 
         wp_reset_postdata();
