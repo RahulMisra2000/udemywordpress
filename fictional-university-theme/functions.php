@@ -64,6 +64,9 @@ function university_features() {
   // *********************************************** So we can assign a featured image to each post
   add_theme_support('post-thumbnails');
   
+  // *********************************************** Think of professorLandscape as meta information that says that 
+  // from NOW ON when any image is uploaded into WP using the dashboard, then to ALSO create that image in this size 
+  // and save it in the the wp-contents/uploads/ folder
   add_image_size('professorLandscape', 400, 260, true);
   add_image_size('professorPortrait', 480, 650, true);
   add_image_size('pageBanner', 1500, 350, true);
