@@ -16,6 +16,8 @@
 
       <?php
 
+        // related_programs is the custom field created in the Events custom post type by using the ACF plugin
+        // ---------------------------------------------------------------------------------------------------
         $relatedPrograms = get_field('related_programs');
 
         if ($relatedPrograms) {
