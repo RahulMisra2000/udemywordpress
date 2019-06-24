@@ -20,21 +20,21 @@ function university_post_types() {
   ));
 
   // Event Post type
-  register_post_type('event', array(
+  register_post_type('event', array(          // ************** Name of the custom post type
     'capability_type' => 'event',
     'map_meta_cap' => true,
-    'supports' => array('title', 'editor', 'excerpt'),
-    'rewrite' => array('slug' => 'events'),
-    'has_archive' => true,
-    'public' => true,
-    'labels' => array(
+    'supports' => array('title', 'editor', 'excerpt'),  //******* What will appear in the data entry form for this custom post type
+    'rewrite' => array('slug' => 'events'),  // ************** This is the slug of the archive
+    'has_archive' => true,                   // ************** This enables us to have an archive url
+    'public' => true,                       // *************** So, that it shows up in the dashboard for data entry
+    'labels' => array(                      // ************* The labels in the dashboard
       'name' => 'Events',
       'add_new_item' => 'Add New Event',
       'edit_item' => 'Edit Event',
       'all_items' => 'All Events',
       'singular_name' => 'Event'
     ),
-    'menu_icon' => 'dashicons-calendar'
+    'menu_icon' => 'dashicons-calendar'     // ************** The icon in the dashboard
   ));
 
   // Program Post Type
