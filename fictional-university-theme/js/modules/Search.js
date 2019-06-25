@@ -31,7 +31,7 @@ class Search {
 
   // 2. events
   events() {
-    // ********** this method is called by doing this.events() in the constructor above ... 
+    // ********** this method is called by doing this.events() in the constructor above ...  
     // so this inside this method, refers to the object of class Search
     // However, INSIDE the eventhandlers this refers to either the target (if using jquery's on as below) or the currentTarget (if 
     // you configured the event handler by doing addEventListener() 
