@@ -129,9 +129,13 @@ class Search {
   }
 
   keyPressDispatcher(e) {
+    // ****************************  $("input, textarea").is(':focus') *******************
+    // will return true if any input or textarea element has focus 
     if (e.keyCode == 83 && !this.isOverlayOpen && !$("input, textarea").is(':focus')) {
       this.openOverlay();
     }
+    
+    // ***********************************************************************************
 
     if (e.keyCode == 27 && this.isOverlayOpen) {
       this.closeOverlay();
