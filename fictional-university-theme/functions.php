@@ -57,7 +57,10 @@ function university_files() {
   wp_enqueue_style('university_main_styles', get_stylesheet_uri());
   
 // **************************** A global js variable called universityData is being created here that will contain as its value 
-//                              the 3rd parameter  
+//                              the 3rd parameter. WP actually creates a CDATA section inside the rendered html
+//                              Also, I think the variable will only be available to the js file whose handle is the 1st parameter
+//                              So, in this example, this variable will only be avialble to scripts-bundled.js because they both 
+//                              share the same 1st parameter
   wp_localize_script('main-university-js', 'universityData', array(
     'root_url' => get_site_url(),
     'nonce' => wp_create_nonce('wp_rest')
