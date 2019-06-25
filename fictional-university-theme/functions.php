@@ -47,13 +47,21 @@ function pageBanner($args = NULL) {
 
 function university_files() {
   wp_enqueue_script('googleMap', '//maps.googleapis.com/maps/api/js?key=AIzaSyBh9b1rNCp6kOi5JeMHiRP4klDymBeoEWk', NULL, '1.0', true);
+  
+  // ************************* webpack can be used to bundle all .js files into a bundle called scripts-bundle.js
   wp_enqueue_script('main-university-js', get_theme_file_uri('/js/scripts-bundled.js'), NULL, '1.0', true);
+  // ********************************************************************************************************************************
+  
   wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
   wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
   wp_enqueue_style('university_main_styles', get_stylesheet_uri());
+  
+// **************************** A global js variable called universityData is being created here that will contain as its value 
+//                              the 3rd parameter  
   wp_localize_script('main-university-js', 'universityData', array(
     'root_url' => get_site_url(),
     'nonce' => wp_create_nonce('wp_rest')
+  // ********************************************************************************************************************************
   ));
 }
 
@@ -66,7 +74,8 @@ function university_features() {
   
   // *********************************************** Think of professorLandscape as meta information that says that 
   // from NOW ON when any image is uploaded into WP using the dashboard, then to ALSO create that image in this size 
-  // and save it in the the wp-contents/uploads/ folder
+  // and save it in the the wp-contents/uploads/ folder. professor has NOTHING to do with this ... bad name selection ...
+  // should have been called image480260 for example .... something like that
   add_image_size('professorLandscape', 400, 260, true);
   add_image_size('professorPortrait', 480, 650, true);
   add_image_size('pageBanner', 1500, 350, true);
@@ -75,6 +84,7 @@ function university_features() {
 add_action('after_setup_theme', 'university_features');
 
 function university_adjust_queries($query) {
+  // ****************************** is_admin() will be true during dashboard processing, NOT your front-end (website) processing
   if (!is_admin() AND is_post_type_archive('campus') AND is_main_query()) {
     $query->set('posts_per_page', -1);
   }
