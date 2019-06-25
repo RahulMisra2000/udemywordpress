@@ -59,7 +59,12 @@ class Search {
           this.resultsDiv.html('<div class="spinner-loader"></div>');
           this.isSpinnerVisible = true;
         }
+        // *********** The this inside the getResults method will point to the this here, which is the this ***********************
+        // inside the typingLogic method..... when calling this method .... .bind was used and the this that was provided 
+        // that was the object created from the Search class .... THE REASON for all this is so that we may be able to access
+        // the properties of the object 
         this.typingTimer = setTimeout(this.getResults.bind(this), 750);
+        // *************************************************************************************************************************
       } else {
         this.resultsDiv.html('');
         this.isSpinnerVisible = false;
@@ -71,6 +76,10 @@ class Search {
   }
 
   getResults() {
+    
+    // *********** Here we are using the ES6 arrow function so that the this inside the callback function will be the this 
+    // that is in the outer lexical function which is getResults
+    // *************************************************************************************************************************
     $.getJSON(universityData.root_url + '/wp-json/university/v1/search?term=' + this.searchField.val(), (results) => {
       this.resultsDiv.html(`
         <div class="row">
