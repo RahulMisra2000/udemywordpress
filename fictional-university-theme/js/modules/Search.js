@@ -19,7 +19,10 @@ class Search {
     this.searchOverlay = $(".search-overlay");
     this.searchField = $("#search-term");
     // *******************************************************************************************
+    
+    // *************** this refers to the object that is created by this class Search
     this.events();
+    
     this.isOverlayOpen = false;
     this.isSpinnerVisible = false;
     this.previousValue;
@@ -28,10 +31,21 @@ class Search {
 
   // 2. events
   events() {
+    // ********** this method is called by doing this.events() in the constructor above ... 
+    // so this inside this method, refers to the object of class Search
+    // However, INSIDE the eventhandlers this refers to either the target (if using jquery's on as below) or the currentTarget (if 
+    // you configured the event handler by doing addEventListener() 
+    // If you look at inside the event handler code you will see that the code wants to be able to access the properties of the 
+    // object that was created from the Search class ... in other words it wants the this to point to the object that was created
+    // from the Search class .... that is why we do a .bind(this) .. .which creates another event handler (a wrapper) of the original 
+    // with the only difference being that the this INSIDE the event handler will be whatever the argument to .bind is.
+    // 
     this.openButton.on("click", this.openOverlay.bind(this));
     this.closeButton.on("click", this.closeOverlay.bind(this));
     $(document).on("keydown", this.keyPressDispatcher.bind(this));
     this.searchField.on("keyup", this.typingLogic.bind(this));
+    // *************************************************************************************************************************
+    
   }
   
 
