@@ -1,14 +1,24 @@
-import $ from 'jquery';
+// *********************************************************************************************
+// UDEMY author is using ES6 javascript and ES6 Modules architecture
+// Then he uses webpack to bundle all the .js files into one .js which 
+// is used in functions.php to create a <script tag 
+// *********************************************************************************************
+
+import $ from 'jquery';     // Dependency in ES6: jquery is needed by the js in this file  
 
 class Search {
   // 1. describe and create/initiate our object
   constructor() {
     this.addSearchHTML();
+    
+    // *************** DOM lookup is expensive so it is better to get pointers to the DOM *******
+    //                 elements and hold on to them for use later.
     this.resultsDiv = $("#search-overlay__results");
     this.openButton = $(".js-search-trigger");
     this.closeButton = $(".search-overlay__close");
     this.searchOverlay = $(".search-overlay");
     this.searchField = $("#search-term");
+    // *******************************************************************************************
     this.events();
     this.isOverlayOpen = false;
     this.isSpinnerVisible = false;
