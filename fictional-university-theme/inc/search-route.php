@@ -3,18 +3,31 @@
 add_action('rest_api_init', 'universityRegisterSearch');
 
 function universityRegisterSearch() {
+  // *********** Here we are adding a custom REST API   http://domain/wp-json/university/v1/search ********************
   register_rest_route('university/v1', 'search', array(
-    'methods' => WP_REST_SERVER::READABLE,
-    'callback' => 'universitySearchResults'
+    'methods' => WP_REST_SERVER::READABLE,                // **********  this api will support http GET verb
+    'callback' => 'universitySearchResults'               // **********  this is the handler when the api comes into WP
   ));
 }
 
+
+// *** WP stuffs the first parameter into our handler. It contains a lot of interesting data ...including the url's query string *******
 function universitySearchResults($data) {
   $mainQuery = new WP_Query(array(
-    'post_type' => array('post', 'page', 'professor', 'program', 'campus', 'event'),
+    'post_type' => array('post', 'page', 'professor', 'program', 'campus', 'event'),    // **** what type of content to search
+     // post is the traditional blog post ... the post that comes bundled with wordpress
+     // page is the traditional page  that comes bundled with wordpress
+     // professor, program, campus and event are custom post types that the author created for this website
+    
+    //  ALL user entered data should be sanitized
+    // ***** So if this is received by WP ... http://domain/wp-json/university/v1/search?term=abc
+    // Then WP will search all the above post types TITLE and MAIN CONTENT for the word abc. This is what the s parameter below does
     's' => sanitize_text_field($data['term'])
   ));
 
+  // ************* Creating an associative array in WP ... think of it as analogous to javascript object *****************
+  // => is just like : in javascript's literal object definition.       
+  // DETOUR:    in php -> is the same as javascript's dot notation to go inside an object
   $results = array(
     'generalInfo' => array(),
     'professors' => array(),
