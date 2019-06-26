@@ -104,60 +104,78 @@ function universitySearchResults($data) {
           ));
     }
     
-  }
+  }     // WHILE LOOP that cycles through 'post_type' => array('post', 'page', 'professor', 'program', 'campus', 'event')
 
-  if ($results['programs']) {
+  
+  
+  
+  // **********************************************************************************************************************
+  // Now we will see if there are any professors and events that linked to programs that were found above
+  // and placed in the $results['programs'] array
+  // **********************************************************************************************************************
+  if ($results['programs']) {             // ********** if we found any program records during the search above
+                                          // If so then, let us search for Professor and Event records whose ACF field called
+                                          // related_programs, points to the program record 
+       
+    
+    
+        // *********** Build the WHERE clause for the query *************
         $programsMetaQuery = array('relation' => 'OR');
 
-        foreach($results['programs'] as $item) {
+        foreach($results['programs'] as $item) {          // *** as many as the number of program records that matched the search
               array_push($programsMetaQuery, array(
-                  'key' => 'related_programs',
+                  'key' => 'related_programs',                // ACF field
                   'compare' => 'LIKE',
-                  'value' => '"' . $item['id'] . '"'
+                  'value' => '"' . $item['id'] . '"'          // program id
                 ));
-    }
-
-    $programRelationshipQuery = new WP_Query(array(
-      'post_type' => array('professor', 'event'),
-      'meta_query' => $programsMetaQuery
-    ));
-
-    while($programRelationshipQuery->have_posts()) {
-      $programRelationshipQuery->the_post();
-
-      if (get_post_type() == 'event') {
-        $eventDate = new DateTime(get_field('event_date'));
-        $description = null;
-        if (has_excerpt()) {
-          $description = get_the_excerpt();
-        } else {
-          $description = wp_trim_words(get_the_content(), 18);
         }
 
-        array_push($results['events'], array(
-          'title' => get_the_title(),
-          'permalink' => get_the_permalink(),
-          'month' => $eventDate->format('M'),
-          'day' => $eventDate->format('d'),
-          'description' => $description
+        // ************ Set up the query ***************
+        $programRelationshipQuery = new WP_Query(array(
+          'post_type' => array('professor', 'event'),           // professor or event records whose ACF related_programs field 
+                                                                // has program id of the program records that were found
+          'meta_query' => $programsMetaQuery
         ));
-      }
 
-      if (get_post_type() == 'professor') {
-        array_push($results['professors'], array(
-          'title' => get_the_title(),
-          'permalink' => get_the_permalink(),
-          'image' => get_the_post_thumbnail_url(0, 'professorLandscape')
-        ));
-      }
+    
+        // *********** Execute the query which will return the professor and Event records that satisfy the where clause
+        while($programRelationshipQuery->have_posts()) {
+                $programRelationshipQuery->the_post();
 
-    }
+                if (get_post_type() == 'event') {                                         // **** Event record
+                      $eventDate = new DateTime(get_field('event_date'));
+                      $description = null;
+                          if (has_excerpt()) {
+                            $description = get_the_excerpt();
+                          } else {
+                            $description = wp_trim_words(get_the_content(), 18);
+                          }
 
-    $results['professors'] = array_values(array_unique($results['professors'], SORT_REGULAR));
-    $results['events'] = array_values(array_unique($results['events'], SORT_REGULAR));
-  }
+                      array_push($results['events'], array(                     
+                          'title' => get_the_title(),
+                          'permalink' => get_the_permalink(),
+                          'month' => $eventDate->format('M'),
+                          'day' => $eventDate->format('d'),
+                          'description' => $description
+                      ));
+                }  // if
 
+                if (get_post_type() == 'professor') {                                     // ******** professor record
+                    array_push($results['professors'], array(
+                      'title' => get_the_title(),
+                      'permalink' => get_the_permalink(),
+                      'image' => get_the_post_thumbnail_url(0, 'professorLandscape')
+                    ));
+                }
+
+        }   // WHILE LOOP
+
+        // ********* Because the professors and events can be duplicated, the following will remove the duplicates
+        
+        $results['professors'] = array_values(array_unique($results['professors'], SORT_REGULAR));
+        $results['events'] = array_values(array_unique($results['events'], SORT_REGULAR));
+
+  } // *********** if ($results['programs']) {
 
   return $results;
-
 }
