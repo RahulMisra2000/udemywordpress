@@ -37,6 +37,13 @@ function universitySearchResults($data) {
     'campuses' => array()
   );
 
+  
+  
+  // *************************************** 1st LOOP *********************************************************************
+  //  will stuff into separate arrays all these post types --> 'post', 'page', 'professor', 'program', 'campus', 'event' 
+  //  whose title or body (main content) has *abc* as the searcg term in the API call
+  //  eg. http://domain/wp-json/university/v1/search?term=abc
+  
   while($mainQuery->have_posts()) {
     $mainQuery->the_post();                           // ***** this allows the template tags like get_the_title() to access 
                                                       //       data in the returned record   ++++++++
@@ -106,11 +113,18 @@ function universitySearchResults($data) {
     
   }     // WHILE LOOP that cycles through 'post_type' => array('post', 'page', 'professor', 'program', 'campus', 'event')
 
+  // *************************************** END OF 1st LOOP *********************************************************************
+  // At this stage all the arrays()   -->>  generalInfo  professors, programs, events, campuses
+  // are filled with records of the above post types that matched the search term
+    
   
   
   
+  
+  
+   
   // **********************************************************************************************************************
-  // Now we will see if there are any professors and events that linked to programs that were found above
+  // Now we will see if there are any professors and events that linked to program records that were found in the 1st Loop
   // and placed in the $results['programs'] array
   // **********************************************************************************************************************
   if ($results['programs']) {             // ********** if we found any program records during the search above
@@ -171,7 +185,18 @@ function universitySearchResults($data) {
         }   // WHILE LOOP
 
         // ********* Because the professors and events can be duplicated, the following will remove the duplicates
-        
+        // If the search term is let's say biology ... then if the Professor has the word biology in his title (the_title) or 
+        // body (the_content) then the 1st loop will add the professor to the professor's array.
+        // Now if the word biology appears in a program record (title or body) then that program record will be added to 
+        // the programs array in the 1st loop
+        // After the 1st loop as we cycle through the programs array and search for professor records that are pointing to the program 
+        // record, we may find a professor (whose title or body contains the search term biology and by virtue of that was shoved
+        // into the professors array in the 1st loop) who will therefore get added again this time because of the ACF link 
+        // ... now the professor will appear twice in the professors array.
+    
+        // Same above reasoning with Events...
+    
+        // Hence the need to remove the duplicates from the professors and events array.
         $results['professors'] = array_values(array_unique($results['professors'], SORT_REGULAR));
         $results['events'] = array_values(array_unique($results['events'], SORT_REGULAR));
 
