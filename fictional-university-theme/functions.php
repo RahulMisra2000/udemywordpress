@@ -57,7 +57,10 @@ function university_files() {
   
   wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
   wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+  
+// ************** This loads our theme folder's main stylesheet called style.css ****************************************************
   wp_enqueue_style('university_main_styles', get_stylesheet_uri());
+  
   
 // **************************** A global js variable called universityData is being created here that will contain as its value 
 //                              the 3rd parameter. WP actually creates a CDATA section inside the rendered html
