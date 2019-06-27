@@ -74,6 +74,10 @@ function university_files() {
   ));
 }
 
+// ********** THIS EVENT only fires in the front end ... ie when our theme code is executing ... ie our website
+//            it DOES NOT fire when the dashboard code (wp-admin is executing)
+//            To load our js css and fonts when the Dashboard is active (meaning for example the WP's login form is up)
+//            then we need to write event handler for the login_enqueue_scripts event as shown at the end of this file
 add_action('wp_enqueue_scripts', 'university_files');
 
 function university_features() {
