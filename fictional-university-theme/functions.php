@@ -127,27 +127,30 @@ function universityMapKey($api) {
 add_filter('acf/fields/google_map/api', 'universityMapKey');
 
 
-// Redirect subscriber accounts out of admin and onto homepage
-add_action('admin_init', 'redirectSubsToFrontend');
+// ******************* Redirect users whose ONLY role IS subscriber out of DASHBOARD and onto homepage *************
+add_action('admin_init', 'y');
+function y() {
+      $ourCurrentUser = wp_get_current_user();
 
-function redirectSubsToFrontend() {
-  $ourCurrentUser = wp_get_current_user();
-
-  if (count($ourCurrentUser->roles) == 1 AND $ourCurrentUser->roles[0] == 'subscriber') {
-    wp_redirect(site_url('/'));
-    exit;
-  }
+      if (count($ourCurrentUser->roles) == 1 AND $ourCurrentUser->roles[0] == 'subscriber') {
+          wp_redirect(site_url('/'));
+          exit;
+      }
 }
+// ******************************************************************************************************************
 
-add_action('wp_loaded', 'noSubsAdminBar');
 
-function noSubsAdminBar() {
+// ******************* Don't show black admin bar across the top users whose ONLY role IS subscriber  ***************
+add_action('wp_loaded', 'x');
+function x() {
   $ourCurrentUser = wp_get_current_user();
 
   if (count($ourCurrentUser->roles) == 1 AND $ourCurrentUser->roles[0] == 'subscriber') {
     show_admin_bar(false);
   }
 }
+// ******************************************************************************************************************
+
 
 // Customize Login Screen
 add_filter('login_headerurl', 'ourHeaderUrl');
