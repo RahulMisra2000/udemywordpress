@@ -161,9 +161,13 @@ function ourHeaderUrl() {
   return esc_url(site_url('/'));
 }
 
-add_action('login_enqueue_scripts', 'ourLoginCSS');       // **** Load our css file on the login page .. 
-function ourLoginCSS() {                                  // the wp_enqueue_scripts does not happen on this login page
-                                                          // so we load our css that pertains to the login page, here
+add_action('login_enqueue_scripts', 'ourLoginCSS');       // **** Load our theme's main css file, style.css on the login page .. 
+function ourLoginCSS() {                                  // the wp_enqueue_scripts event ONLY fires on our front-end ....
+                                                          // not the backend (dashboard) ...basically not when the code in the wp-admin
+                                                          // folder is executing ... which is what creates the login page
+                                                          // so we load our css that pertains into dashboard or back-end part
+                                                          // Now we just need to F12 inspect the elements on the login page and place the
+                                                          // css styles in style.css 
   wp_enqueue_style('university_main_styles', get_stylesheet_uri());
   wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
 }
