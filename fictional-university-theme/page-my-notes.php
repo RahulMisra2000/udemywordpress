@@ -1,13 +1,14 @@
 <?php
 
-  if (!is_user_logged_in()) {
-    wp_redirect(esc_url(site_url('/')));
-    exit;
+  if (!is_user_logged_in()) {                     // ************** ONLY logged in users, otherwise redirect them to home page ******
+    wp_redirect(esc_url(site_url('/')));      
+    exit;                                         // Stop processing this page as the redirect is happening .....
   }
 
   get_header();
 
-  while(have_posts()) {
+  while(have_posts()) {                         // **** We are doing this ONLY to get the title and some ACF fields from the PAGE My Notes
+                                                // that we created from Dashboard, so that the function pageBanner() has access to them
     the_post();
     pageBanner();
      ?>
