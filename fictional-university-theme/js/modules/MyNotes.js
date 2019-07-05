@@ -61,8 +61,11 @@ class MyNotes {
   }
 
   updateNote(e) {
-    var thisNote = $(e.target).parents("li");
+    var thisNote = $(e.target).parents("li");       // ************** thisNote is the DOM node ************************* */ 
 
+    // ************************************************** THE BUILT-IN WP REST API MANDATES  *************************** */
+    //  that when doing an update to an existing record, the data provided must be an object */
+    // an object which must have properties called title and content. Others you will need to check the documentation ** */
     var ourUpdatedPost = {
       'title': thisNote.find(".note-title-field").val(),
       'content': thisNote.find(".note-body-field").val()
@@ -72,7 +75,7 @@ class MyNotes {
       beforeSend: (xhr) => {
         xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
       },
-      url: universityData.root_url + '/wp-json/wp/v2/note/' + thisNote.data('id'),
+      url: universityData.root_url + '/wp-json/wp/v2/note/' + thisNote.data('id'), // The built-in WP REST endpoint for custom post type note
       type: 'POST',
       data: ourUpdatedPost,
       success: (response) => {
