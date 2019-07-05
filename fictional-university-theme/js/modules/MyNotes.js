@@ -6,6 +6,12 @@ class MyNotes {
   }
 
   events() {
+    // ********* #my-notes is the <ul> element that is always in the DOM.
+    // ********* The .delete-note, .edit-note, .update-note these for the newly created ones are not in the DOM when these
+    //            event handlers are wired up... so they don't get any event handlers ... that is why we 
+    //            use the form shown below so that when future elements are added under #my-notes who have classes eg. .delete-note
+    //            that they will get an event handler automatically attached....
+    
     $("#my-notes").on("click", ".delete-note", this.deleteNote);
     $("#my-notes").on("click", ".edit-note", this.editNote.bind(this));
     $("#my-notes").on("click", ".update-note", this.updateNote.bind(this));
