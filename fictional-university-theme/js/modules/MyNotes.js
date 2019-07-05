@@ -94,7 +94,8 @@ class MyNotes {
     var ourNewPost = {
       'title': $(".new-note-title").val(),
       'content': $(".new-note-body").val(),
-      'status': 'publish'
+      'status': 'publish'                     // ****** If we don't do this then the default is to save it as draft *********
+                                              //  and then it won't be part of query results when we do wp_query
     }
     
     $.ajax({
