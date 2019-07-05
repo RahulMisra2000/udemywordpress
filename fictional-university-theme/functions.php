@@ -18,35 +18,41 @@ function university_custom_rest() {
 
 add_action('rest_api_init', 'university_custom_rest');
 
+
+// *********************************** This method is called from many templates *************************** */
 function pageBanner($args = NULL) {
-  
-  if (!$args['title']) {
-    $args['title'] = get_the_title();
-  }
 
-  if (!$args['subtitle']) {
-    $args['subtitle'] = get_field('page_banner_subtitle');
-  }
-
-  if (!$args['photo']) {
-    if (get_field('page_banner_background_image')) {
-      $args['photo'] = get_field('page_banner_background_image')['sizes']['pageBanner'];
-    } else {
-      $args['photo'] = get_theme_file_uri('/images/ocean.jpg');
+    if (!$args['title']) {
+      $args['title'] = get_the_title();                           // ********** This is the built-in title field in the dashboard
     }
-  }
 
-  ?>
-  <div class="page-banner">
-    <div class="page-banner__bg-image" style="background-image: url(<?php echo $args['photo']; ?>);"></div>
-    <div class="page-banner__content container container--narrow">
-      <h1 class="page-banner__title"><?php echo $args['title'] ?></h1>
-      <div class="page-banner__intro">
-        <p><?php echo $args['subtitle']; ?></p>
-      </div>
-    </div>  
-  </div>
-<?php }
+    if (!$args['subtitle']) {
+      $args['subtitle'] = get_field('page_banner_subtitle');      // ********** We setup this field using ACF ***********************
+    }
+
+    if (!$args['photo']) {
+      if (get_field('page_banner_background_image')) {            // ********** We setup this field using ACF ***********************
+        $args['photo'] = get_field('page_banner_background_image')['sizes']['pageBanner'];
+      } else {
+        $args['photo'] = get_theme_file_uri('/images/ocean.jpg');
+      }
+    }
+
+    ?>
+
+    <!-- **************** Now we spew some HTML for the banner area ************************************************************* */
+        <div class="page-banner">
+          <div class="page-banner__bg-image" style="background-image: url(<?php echo $args['photo']; ?>);"></div>
+          <div class="page-banner__content container container--narrow">
+            <h1 class="page-banner__title"><?php echo $args['title'] ?></h1>
+            <div class="page-banner__intro">
+              <p><?php echo $args['subtitle']; ?></p>
+            </div>
+          </div>  
+        </div>
+  <!-- **************** Now we spew some HTML for the banner area ************************************************************* */
+  <?php 
+}
 
 function university_files() {
   wp_enqueue_script('googleMap', '//maps.googleapis.com/maps/api/js?key=AIzaSyBh9b1rNCp6kOi5JeMHiRP4klDymBeoEWk', NULL, '1.0', true);
