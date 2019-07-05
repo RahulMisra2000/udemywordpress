@@ -69,8 +69,10 @@ function university_files() {
 //                              share the same 1st parameter
   wp_localize_script('main-university-js', 'universityData', array(
     'root_url' => get_site_url(),
-    'nonce' => wp_create_nonce('wp_rest')         // Basically WP will create a session id which we HAVE TO pass back as an HTTP header
-                                                  // header when doing CUD of CRUD Ajax requests ... 
+    'nonce' => wp_create_nonce('wp_rest')         // Basically WP will create a session id which we are saving in this 
+                                                  // object called universityData. It can be accessed as universityData.nonce
+                                                  // The built-in WP REST enpoint will need it in the HTTP REQUEST header
+                                                  // when we want to do CUD (of CRUD) Ajax requests ... 
   // ********************************************************************************************************************************
   ));
 }
