@@ -75,8 +75,9 @@ function university_post_types() {
     'map_meta_cap' => true,
     'show_in_rest' => true,
     'supports' => array('title', 'editor'),
-    'public' => false,
-    'show_ui' => true,
+    'public' => false,                                // So that it does not show up in Dashboard/Queries and search results
+                                                      // because it will be user-specific 
+    'show_ui' => true,                                // means show in the ADMIN dashboard
     'labels' => array(
       'name' => 'Notes',
       'add_new_item' => 'Add New Note',
