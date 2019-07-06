@@ -194,26 +194,30 @@ function ourLoginTitle() {
 
 // *************** Do something BEFORE a record is newly added OR updated in the database ***/
 add_filter('wp_insert_post_data', 'makeNotePrivate', 10, 2);
+// ********** The 3rd parameter above is a priority number that controls which eventhandler should run before others IF there were
+// ********** multiple handlers defined. The 2 in the 4th param means that the function makeNotePrivate has 2 params
 function makeNotePrivate($data, $postarr) {
-  // This method will execute before ANY post is being inserted OR updated into the database
-  // ********************************************************** $data    :   Incoming data that will be manipulated
-  
-  if ($data['post_type'] == 'note') {                                                 // only for the Note custom post type
-        if(count_user_posts(get_current_user_id(), 'note') > 4 AND !$postarr['ID']) {
-          die("You have reached your note limit.");
-        }
+      // *****************************************************************************************************************************
+      // This method will execute before ANY post is being inserted OR updated into the database
+      // When we delete a post, WP actually changes the status of the post to 'Trash' and so it means that WP calls this event handler
+      // also because that is technically updating the record. ***********************************************************************
+      // ******** $data    :   Incoming data that will be manipulated
+        if ($data['post_type'] == 'note') {                                                 // only for the Note custom post type
+            if(count_user_posts(get_current_user_id(), 'note') > 4 AND !$postarr['ID']) {
+              die("You have reached your note limit.");
+            }
 
-        // ********************* sanitize the title and the content of the Note so that all html elements are stripped that the
-        // user may have typed in them (eg. <script ... or any html tag) for malicious reasons or whatever reasons....
-        // we want to make sure it doesn't get into the database because when it is later displayed we don't want the <script to run
-        // etc .
-        $data['post_content'] = sanitize_textarea_field($data['post_content']);
-        $data['post_title'] = sanitize_text_field($data['post_title']);
-  }
+            // ********************* sanitize the title and the content of the Note so that all html elements are stripped that the
+            // user may have typed in them (eg. <script ... or any html tag) for malicious reasons or whatever reasons....
+            // we want to make sure it doesn't get into the database because when it is later displayed we don't want the <script to run
+            // etc .
+            $data['post_content'] = sanitize_textarea_field($data['post_content']);
+            $data['post_title'] = sanitize_text_field($data['post_title']);
+      }
 
-  if($data['post_type'] == 'note' AND $data['post_status'] != 'trash') {
-        $data['post_status'] = "private";                                       // * Force note posts to be private *****************
-  }
-  
-  return $data;                         // ************ Return the Modified data
+      if($data['post_type'] == 'note' AND $data['post_status'] != 'trash') {
+            $data['post_status'] = "private";                                       // * Force note posts to be private *****************
+      }
+
+      return $data;                         // ************ Return the Modified data
 }
