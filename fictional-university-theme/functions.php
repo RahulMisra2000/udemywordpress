@@ -203,6 +203,10 @@ function makeNotePrivate($data, $postarr) {
           die("You have reached your note limit.");
         }
 
+        // ********************* sanitize the title and the content of the Note so that all html elements are stripped that the
+        // user may have typed in them (eg. <script ... or any html tag) for malicious reasons or whatever reasons....
+        // we want to make sure it doesn't get into the database because when it is later displayed we don't want the <script to run
+        // etc .
         $data['post_content'] = sanitize_textarea_field($data['post_content']);
         $data['post_title'] = sanitize_text_field($data['post_title']);
   }
