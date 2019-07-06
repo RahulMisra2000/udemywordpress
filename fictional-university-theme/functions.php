@@ -174,6 +174,7 @@ function ourHeaderUrl() {
   return esc_url(site_url('/'));
 }
 
+
 add_action('login_enqueue_scripts', 'ourLoginCSS');       // **** Load our theme's main css file, style.css on the login page .. 
 function ourLoginCSS() {                                  // the wp_enqueue_scripts event ONLY fires on our front-end ....
                                                           // not the backend (dashboard) ...basically not when the code in the wp-admin
@@ -181,8 +182,8 @@ function ourLoginCSS() {                                  // the wp_enqueue_scri
                                                           // so we load our css that pertains into dashboard or back-end part
                                                           // Now we just need to F12 inspect the elements on the login page and place the
                                                           // css styles in style.css 
-  wp_enqueue_style('university_main_styles', get_stylesheet_uri());
-  wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
+    wp_enqueue_style('university_main_styles', get_stylesheet_uri());
+    wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
 }
 
 add_filter('login_headertitle', 'ourLoginTitle');
@@ -191,22 +192,24 @@ function ourLoginTitle() {
   return get_bloginfo('name');
 }
 
-// Force note posts to be private
+// **************************************************************** Do something BEFORE new Note record is written to the database ***/
 add_filter('wp_insert_post_data', 'makeNotePrivate', 10, 2);
-
 function makeNotePrivate($data, $postarr) {
-  if ($data['post_type'] == 'note') {
-    if(count_user_posts(get_current_user_id(), 'note') > 4 AND !$postarr['ID']) {
-      die("You have reached your note limit.");
-    }
+  // This method will execute before ANY post is being inserted into the database
+  // ********************************************************** $data    :   Incoming data that will be manipulated
+  
+  if ($data['post_type'] == 'note') {                                                 // only for the Note custom post type
+        if(count_user_posts(get_current_user_id(), 'note') > 4 AND !$postarr['ID']) {
+          die("You have reached your note limit.");
+        }
 
-    $data['post_content'] = sanitize_textarea_field($data['post_content']);
-    $data['post_title'] = sanitize_text_field($data['post_title']);
+        $data['post_content'] = sanitize_textarea_field($data['post_content']);
+        $data['post_title'] = sanitize_text_field($data['post_title']);
   }
 
   if($data['post_type'] == 'note' AND $data['post_status'] != 'trash') {
-    $data['post_status'] = "private";
+        $data['post_status'] = "private";                                       // * Force note posts to be private *****************
   }
   
-  return $data;
+  return $data;                         // ************ Return the Modified data
 }
