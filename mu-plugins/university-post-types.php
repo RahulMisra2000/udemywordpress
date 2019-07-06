@@ -71,14 +71,16 @@ function university_post_types() {
 
   // Note Post Type
   register_post_type('note', array(
-    'capability_type' => 'note',                      // This and the next property together ensures that this custom not type
+    'capability_type' => 'note',                      // This and the next property together ensures that this custom type
                                                       // will not inherit permissions from the built-in post type and instead 
-                                                      // we can assign permissions separately. Also Note will show up under Users 
-                                                      // so we can assign permissions to roles and then assign roles to users
-                                                      // From dashboard sign on as admin and give admin all permissions to Note
-                                                      // and give subscriber only selected permission for Note such as publish notes
-                                                      // edit notes, edit published notes, delete notes 
+                                                      // we can assign permissions separately. Also, Note will show up in Dashboard/Users 
+                                                      // so we can assign Note-related permissions to roles and then assign those roles 
+                                                      // to users. From dashboard sign on as admin and grant admin all permissions to 
+                                                      // Note and give subscriber only selected permission for Note such as publish notes
+                                                      // edit notes, edit published notes, delete notes and delete published notes
     'map_meta_cap' => true,
+    
+    
     'show_in_rest' => true,
     'supports' => array('title', 'editor'),
     'public' => false,                                // So that it does not show up in Dashboard/Queries and search results
