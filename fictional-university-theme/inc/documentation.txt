@@ -1,0 +1,4 @@
+This folder contains separate files which are getting included in functions.php. This keeps the size of functions.php manageable and the code 
+more maintenable.
+
+The Custom APIs are implemented here
