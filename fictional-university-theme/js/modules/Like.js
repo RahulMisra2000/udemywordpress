@@ -6,11 +6,11 @@ class Like {
   }
 
   events() {
-    $(".like-box").on("click", this.ourClickDispatcher.bind(this));
+    $(".like-box").on("click", this.x.bind(this));
   }
 
   // methods
-  ourClickDispatcher(e) {
+  x(e) {
     var currentLikeBox = $(e.target).closest(".like-box");
 
     if (currentLikeBox.attr('data-exists') == 'yes') {
@@ -25,9 +25,9 @@ class Like {
       beforeSend: (xhr) => {
         xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
       },
-      url: universityData.root_url + '/wp-json/university/v1/manageLike',
+      url: universityData.root_url + '/wp-json/university/v1/manageLike',       // *** Custom REST API Endpoint ************
       type: 'POST',
-      data: {'professorId': currentLikeBox.data('professor')},
+      data: {'professorId': currentLikeBox.data('professor')},                  // .data accesses the data-* attributes
       success: (response) => {
         currentLikeBox.attr('data-exists', 'yes');
         var likeCount = parseInt(currentLikeBox.find(".like-count").html(), 10);
@@ -47,7 +47,7 @@ class Like {
       beforeSend: (xhr) => {
         xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
       },
-      url: universityData.root_url + '/wp-json/university/v1/manageLike',
+      url: universityData.root_url + '/wp-json/university/v1/manageLike',     // *** Custom REST API Endpoint ************
       data: {'like': currentLikeBox.attr('data-like')},
       type: 'DELETE',
       success: (response) => {
