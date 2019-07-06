@@ -13,6 +13,9 @@ class Like {
   x(e) {
     var currentLikeBox = $(e.target).closest(".like-box");
 
+    // ****** The reason the author chose NOT to use the jQuery .data method to access the data-* property is because
+    //        the .data method checks the data-* attribute only once when the page loads whereas the .attr() method checks it
+    //        each time it is executed
     if (currentLikeBox.attr('data-exists') == 'yes') {
       this.deleteLike(currentLikeBox);
     } else {
@@ -33,6 +36,9 @@ class Like {
         var likeCount = parseInt(currentLikeBox.find(".like-count").html(), 10);
         likeCount++;
         currentLikeBox.find(".like-count").html(likeCount);
+        
+        // **** The REST API endpoint returns the ID of the newly created Like record    ... wp_insert_post() in the REST endpoint API 
+        //                                                                               returns that 
         currentLikeBox.attr("data-like", response);
         console.log(response);
       },
@@ -48,7 +54,9 @@ class Like {
         xhr.setRequestHeader('X-WP-Nonce', universityData.nonce);
       },
       url: universityData.root_url + '/wp-json/university/v1/manageLike',     // *** Custom REST API Endpoint ************
-      data: {'like': currentLikeBox.attr('data-like')},
+      
+      data: {'like': currentLikeBox.attr('data-like')}, // ***** contains the id of the Like record that we want deleted
+      
       type: 'DELETE',
       success: (response) => {
         currentLikeBox.attr('data-exists', 'no');
