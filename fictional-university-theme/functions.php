@@ -192,10 +192,10 @@ function ourLoginTitle() {
   return get_bloginfo('name');
 }
 
-// **************************************************************** Do something BEFORE new Note record is written to the database ***/
+// *************** Do something BEFORE a record is newly added OR updated in the database ***/
 add_filter('wp_insert_post_data', 'makeNotePrivate', 10, 2);
 function makeNotePrivate($data, $postarr) {
-  // This method will execute before ANY post is being inserted into the database
+  // This method will execute before ANY post is being inserted OR updated into the database
   // ********************************************************** $data    :   Incoming data that will be manipulated
   
   if ($data['post_type'] == 'note') {                                                 // only for the Note custom post type
