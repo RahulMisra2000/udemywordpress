@@ -102,6 +102,8 @@ class MyNotes {
       'content': $(".new-note-body").val(),
       'status': 'publish'                     // ****** If we don't do this then the default is to save it as draft *********
                                               //  and then it won't be part of query results when we do wp_query
+                                              // ***** specify 'private' and then it won't be served up by REST endpoint BUT we 
+                                              //       cannot rely on client-side js... because a malicious user can change this property
     }
     
     $.ajax({
