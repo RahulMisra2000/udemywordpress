@@ -7,10 +7,14 @@ require get_theme_file_path('/inc/search-route.php');
 
 
 function university_custom_rest() {
+  
+  // ************ We want the REST API to return this info ALSO *****************************************************
   register_rest_field('post', 'authorName', array(
     'get_callback' => function() {return get_the_author();}
   ));
 
+  
+  // count_user_posts(u, p) is a WP function that will return the number of records of post type p for the user u ***************
   register_rest_field('note', 'userNoteCount', array(
     'get_callback' => function() {return count_user_posts(get_current_user_id(), 'note');}
   ));
