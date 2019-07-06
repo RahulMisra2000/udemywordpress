@@ -1,8 +1,8 @@
 <?php
 
 // **************************** This just plops the file in here --- just for manageability breaking up physical files ******
-require get_theme_file_path('/inc/like-route.php');
-require get_theme_file_path('/inc/search-route.php');
+require get_theme_file_path('/inc/like-route.php');       // This has the custom REST API endpoint coded for Like custom post type records
+require get_theme_file_path('/inc/search-route.php');     // This has the custom REST API endpoint coded for many different custom post type records
 // **************************************************************************************************************************
 
 
