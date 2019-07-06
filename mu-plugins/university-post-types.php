@@ -77,7 +77,7 @@ function university_post_types() {
                                                       // so we can assign Note-related permissions to roles and then assign those roles 
                                                       // to users. From dashboard sign on as admin and grant admin all permissions to 
                                                       // Note and give subscriber only selected permission for Note such as publish notes
-                                                      // edit notes, edit published notes, delete notes and delete published notes
+                                                      // edit notes, delete notes
     'map_meta_cap' => true,
     
     
