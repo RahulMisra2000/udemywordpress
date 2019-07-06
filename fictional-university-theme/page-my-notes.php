@@ -47,6 +47,7 @@
 
                         <!-- ************************ Title of Note********************************** ---->  
                         <!-- It starts out as readonly and when the user clicks on the edit button, we will remove the readonly attr ---->  
+                        <!-- we need to replace Private with '' because WP appends the word Private: in front of title for Private posts
                         <input readonly class="note-title-field" value="<?php echo str_replace('Private: ', '', esc_attr(get_the_title())); ?>">
                         <!-- ************************ EDIT Button *********************************** ---->  
                         <span class="edit-note"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</span>  
