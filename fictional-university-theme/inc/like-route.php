@@ -69,6 +69,11 @@ function createLikeCB($data) {
 
 function deleteLikeCB($data) {
       $likeId = sanitize_text_field($data['like']);
+      // *** get_post_field('post_author', $likeId)   means get me the author of Like record whose id is $LikeId
+      // *** and it should be the same as the current user sending the ajax request   get_current_user_id 
+      //          the above means that a logged in user can only delete his like record
+      // *** get_post_type($likeId) == 'like')        means the $likeId better be an Id in the Like table 
+      
       if (get_current_user_id() == get_post_field('post_author', $likeId) AND get_post_type($likeId) == 'like') {
           wp_delete_post($likeId, true);
           return 'Congrats, like deleted.';
